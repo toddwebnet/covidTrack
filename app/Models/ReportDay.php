@@ -36,7 +36,12 @@ class ReportDay extends Model
         return $reportDate;
     }
 
-    public static function maxReportDate(){
-        return ReportDay::orderBy('report_date', 'DESC')->first()->report_date;
+    public static function maxReportDate()
+    {
+        try {
+            return ReportDay::orderBy('report_date', 'DESC')->first()->report_date;
+        } catch (ModelNotFoundException $e) {
+            return '2000-01-01';
+        }
     }
 }
