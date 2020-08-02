@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Helpers\ArrayHelpers;
-use AppExceptions\GeneralException;
 use League\Csv\Reader;
 
 class CsvReaderService
@@ -33,15 +32,15 @@ class CsvReaderService
     public function loadFile(string $csvPath, string $delimiter = ',')
     {
         // load the file, get the headers and mark the starting row at 0
-        try {
+        //try {
             $this->reader = Reader::createFromPath($csvPath);
             $this->reader->setDelimiter($delimiter);
             $this->fileLoaded = true;
             $this->extractHeaders();
             $this->reset();
-        } catch (\Exception $e) {
-            throw new GeneralException($e->getMessage(), $e->getCode());
-        }
+//        } catch (\Exception $e) {
+//            throw new GeneralException($e->getMessage(), $e->getCode());
+//        }
     }
 
     /**
