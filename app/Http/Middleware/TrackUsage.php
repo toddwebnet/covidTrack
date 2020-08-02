@@ -11,9 +11,9 @@ class TrackUsage
     {
 
         Tracking::create([
-            'ip_address' => substr($_SERVER['REMOTE_ADDR'], 254),
-            'agent' => substr($_SERVER['HTTP_USER_AGENT'], 254),
-            'url' => substr($_SERVER['REQUEST_URI'], 254)
+            'ip_address' => substr($_SERVER['REMOTE_ADDR'], 0, 254),
+            'agent' => substr($_SERVER['HTTP_USER_AGENT'], 0, 254),
+            'url' => substr($_SERVER['REQUEST_URI'], 0, 254)
 
         ]);
         return $next($request);
