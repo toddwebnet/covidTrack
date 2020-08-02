@@ -47,19 +47,19 @@
     </div>
     <hr/>
     <div class="row" id="graphContainer">
-        <div id="loading_graph1">Loading...</div>
+{{--        <div id="loading_graph1">Loading...</div>--}}
         <h2 id="graph1Title" style="margin-top: 20px"></h2>
         <canvas class="graphs" id="graph1"></canvas>
 
-        <div id="loading_graph2">Loading...</div>
+{{--        <div id="loading_graph2">Loading...</div>--}}
         <h2 id="graph2Title" style="margin-top: 20px"></h2>
         <canvas class="graphs" id="graph2"></canvas>
 
-        <div id="loading_graph2">Loading...</div>
+{{--        <div id="loading_graph3">Loading...</div>--}}
         <h2 id="graph3Title" style="margin-top: 20px"></h2>
         <canvas class="graphs" id="graph3"></canvas>
 
-        <div id="loading_graph4">Loading...</div>
+{{--        <div id="loading_graph4">Loading...</div>--}}
         <h2 id="graph4Title" style="margin-top: 20px"></h2>
         <canvas class="graphs" id="graph4"></canvas>
     </div>

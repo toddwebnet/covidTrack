@@ -60,7 +60,7 @@ function loadTable(args) {
 }
 
 function loadGraph(id, args, title) {
-    $('#loading_' + id).show();
+    //$('#loading_' + id).show();
     $('#id').hide();
     $.ajax({
         url: '/data' + args,
@@ -72,7 +72,7 @@ function loadGraph(id, args, title) {
         var masPopChart = null;
         masPopChart = new Chart(myChart, data);
         $('#' + id + 'Title').html(title);
-        $('#loading_' + id).hide();
+        //$('#loading_' + id).hide();
     });
 }
 
