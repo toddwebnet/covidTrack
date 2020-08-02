@@ -35,7 +35,6 @@ class DeathOrCaseImportService
             foreach (array_keys($row) as $rowKey) {
                 if (strtotime($rowKey) !== false && strtotime($rowKey) > $minTs) {
                     $date = new Carbon($rowKey);
-                    print $rowKey . "\n";
                     $delta = $row[$rowKey] - $lastEntry;
                     $lastEntry = $row[$rowKey];
                     /** @var ReportDay $reportDay */
@@ -47,7 +46,7 @@ class DeathOrCaseImportService
                         $reportDay->{$case . '_delta'} = $delta;
                         $reportDay->save();
                     }
-                
+
                 }
             }
 
