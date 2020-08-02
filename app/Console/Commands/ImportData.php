@@ -2,18 +2,14 @@
 
 namespace App\Console\Commands;
 
-use App\Models\County;
 use App\Models\ReportDay;
-use App\Models\State;
 use App\Services\DeathOrCaseImportService;
-use App\Services\CsvReaderService;
 use App\Services\PopulationImportService;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class Test extends Command
+class ImportData extends Command
 {
-    protected $signature = 'test';
+    protected $signature = 'import';
 
     public function handle()
     {

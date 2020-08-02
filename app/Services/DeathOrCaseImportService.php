@@ -13,7 +13,7 @@ class DeathOrCaseImportService
 {
     public function import($csvPath, $case = 'cases', $maxReportDate = '2000-01-01', $output = true)
     {
-        $minTs = strtotime($maxReportDate);
+        $minTs = strtotime($maxReportDate . ' - 1 day');
         /** @var CsvReaderService $csvReaderService */
         $states = [];
 
