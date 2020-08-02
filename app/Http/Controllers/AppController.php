@@ -59,7 +59,7 @@ class AppController extends Controller
         } else {
             $where = '';
         }
-        $sql = "select sum(population) sum_population from counties " . str_replace('county_id', 'id', $where) ;
+        $sql = "select sum(population) sum_population from counties " . str_replace('county_id', 'id', $where);
 
         $rows = DB::select($sql, $params);
         $population = $rows[0]->sum_population;
@@ -249,40 +249,20 @@ class AppController extends Controller
     {
 
         $reportdate = ReportDay::maxReportDate();
-        if($source = 'county'){
+        if ($source == 'county') {
             $source = 'state';
             $id = County::find($id)->state_id;
         }
         // USA
         if ($source == null) {
 
-            $sql = "
-                select state_id, label, cases, deaths, population from (
-                    select
-                        s.id,
-                        s.name label,
-                        sum(cases) cases,
-                        sum(deaths) deaths
-                    from report_days rd
-                    inner join states s on s.id = rd.state_id
-                    where rd.report_date = ?
-                    group by s.id, s.name
-                ) stats
-                left outer join (
-                    select state_id, sum(population) population
-                    from counties c
-                    group by state_id
-                ) pop on pop.state_id = stats.id
-
-            ";
-            $params = [$reportdate];
-            $childData = $this->addExtraFields(DB::select($sql, $params), 'state');
-            $parentData = $this->rollUpData('USA', $childData, 'country');
+            list($childData, $parentData) = $this->getUsaTableData($reportdate);
             $parentLabel = 'Country';
             $childLabel = 'State';
 
         }
         if ($source == 'state') {
+            list($nothing, $usaData) = $this->getUsaTableData($reportdate);
             $sql = "
                select county_id, state_id, label, cases, deaths, population from (
                     select
@@ -306,7 +286,12 @@ class AppController extends Controller
             $params = [$reportdate, $id, $id];
 
             $childData = $this->addExtraFields(DB::select($sql, $params), 'county');
-            $parentData = $this->rollUpData(State::find($id)->name, $childData, 'state');
+            $parentData =
+            array_merge(
+                $this->rollUpData(State::find($id)->name, $childData, 'state'),
+                $usaData
+            );
+
             $parentLabel = 'State';
             $childLabel = 'County';
         }
@@ -322,6 +307,33 @@ class AppController extends Controller
             ]
         ];
         return view('tables', $data);
+    }
+
+    private function getUsaTableData($reportdate)
+    {
+        $sql = "
+                select state_id, label, cases, deaths, population from (
+                    select
+                        s.id,
+                        s.name label,
+                        sum(cases) cases,
+                        sum(deaths) deaths
+                    from report_days rd
+                    inner join states s on s.id = rd.state_id
+                    where rd.report_date = ?
+                    group by s.id, s.name
+                ) stats
+                left outer join (
+                    select state_id, sum(population) population
+                    from counties c
+                    group by state_id
+                ) pop on pop.state_id = stats.id
+
+            ";
+        $params = [$reportdate];
+        $childData = $this->addExtraFields(DB::select($sql, $params), 'state');
+        $parentData = $this->rollUpData('USA', $childData, 'country');
+        return [$childData, $parentData];
     }
 
     private function addExtraFields($rows, $arena)
@@ -357,6 +369,9 @@ class AppController extends Controller
 
     private function buildDrilldown($arena, $row)
     {
+        if ($arena == 'country') {
+            return "JavaScript:loadTable('')";
+        }
         if ($arena == 'state') {
             return "JavaScript:loadTable('/state/{$row->state_id}')";
         }

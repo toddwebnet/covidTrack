@@ -1,5 +1,6 @@
 <h2>{{ $label }} Data</h2>
-<hr/>
+<div style="text-align:center;font-size: 10px">(click on the table headers to change sorting options)</div>
+
 <table class="table table-striped table-bordered sortableTable" style="width:900px">
     <thead>
     <tr>
