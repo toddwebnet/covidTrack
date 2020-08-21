@@ -19,26 +19,37 @@ function loadApp() {
 
 function loadUsaGraph() {
 
-    loadGraphCollection('');
+    loadGraphCollection('', true);
 
 }
 
 
 function loadLocaleGraph(type, id) {
     var extraArgs = '/' + type + '/' + id;
-    loadGraphCollection(extraArgs);
+    showCircle = (type == 'state') ? true : false
+    loadGraphCollection(extraArgs, showCircle);
 }
 
-function loadGraphCollection(extraArgs) {
+function loadGraphCollection(extraArgs, showCircle) {
+
     toggleGraph('graph');
     $.ajax({
         url: '/label' + extraArgs,
         cache: false,
     }).done(function (label) {
+        if (showCircle) {
+            $('.deaths').show();
+            $('#deathsTitle').html(label + ' Age Death Breakdown');
+            loadGraph('deaths1', '/age_breakdown_pie' + extraArgs, '');
+            loadGraph('deaths2', '/age_breakdown_bar' + extraArgs, '');
+        } else {
+            $('.deaths').hide();
+        }
         loadGraph('graph1', '/case_totals,death_totals' + extraArgs, label + ' Cumulative');
         loadGraph('graph2', '/case_deltas,death_deltas' + extraArgs, label + ' Deltas');
         loadGraph('graph3', '/perc_pop_cases,perc_pop_deaths' + extraArgs, label + ' Percent Population');
         loadGraph('graph4', '/change_rate_cases,change_rate_deaths' + extraArgs, label + ' Change Rates (today/yesteday)');
+
         loadTable(extraArgs);
     });
 }
@@ -71,7 +82,9 @@ function loadGraph(id, args, title) {
         var myChart = document.getElementById(id).getContext('2d');
         var masPopChart = null;
         masPopChart = new Chart(myChart, data);
-        $('#' + id + 'Title').html(title);
+        if (title != '') {
+            $('#' + id + 'Title').html(title);
+        }
         //$('#loading_' + id).hide();
     });
 }

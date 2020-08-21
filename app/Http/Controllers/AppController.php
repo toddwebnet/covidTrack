@@ -7,6 +7,7 @@ use App\Models\Measurement;
 use App\Models\MeasurementType;
 use App\Models\ReportDay;
 use App\Models\State;
+use App\Services\AgeDataBuilder;
 use App\Services\HealthTrackService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,9 +24,86 @@ class AppController extends Controller
         return view('index', $data);
     }
 
+    private function colors($num)
+    {
+        $colors = [
+
+            'pink',
+            'yellow',
+            'gray',
+            'orange',
+            'brown',
+            'green',
+            'blue',
+            'purple',
+            'cyan',
+            'DodgerBlue',
+            'deeppink',
+            'darkred',
+            'lightred',
+            'hotpink',
+            'indianred',
+            'lavender',
+            'maroon'
+        ];
+        $rColors = [];
+        for ($x = 0; $x < $num; $x++) {
+            $rColors[] = $colors[$x];
+        }
+        return $rColors;
+    }
+
+    private function ageBreakdown($source, $id, $type)
+    {
+
+        $packet = (new AgeDataBuilder())->buildData($source, $id, 'covid_deaths');
+        $labels = array_keys($packet);
+        $values = array_values($packet);
+        $colors = $this->colors(count($packet));
+        $datasets = [
+            [
+                "label"=> "Covid Deaths By Age Group",
+                'data' => $values,
+                'backgroundColor' => $colors
+            ]
+        ];
+        $i = 0;
+
+
+
+        foreach ($packet as $label => $value) {
+
+            $dataPoints[] = [
+                'label' => $label,
+                'data' => [$value],
+                'backgroundColor' => $colors[$i]
+            ];
+            $i++;
+        }
+
+        $dataObj = [
+            'type' => $type,
+
+            'data' => [
+                'labels' => $labels,
+                'datasets' => $datasets
+            ],
+            //'options' => []
+        ];
+
+
+        return ($dataObj);
+    }
+
     function data($formulas = 'case_totals,death_totals,case_deltas,death_deltas,perc_pop_cases,perc_pop_deaths,change_rate_cases,change_rate_deaths',
                   $source = null, $id = null)
     {
+        if ($formulas == 'age_breakdown_pie') {
+            return $this->ageBreakdown($source, $id, 'pie');
+        }
+        if ($formulas == 'age_breakdown_bar') {
+            return $this->ageBreakdown($source, $id, 'bar');
+        }
         $state = null;
         $county = null;
         if ($source == 'state') {
@@ -287,10 +365,10 @@ class AppController extends Controller
 
             $childData = $this->addExtraFields(DB::select($sql, $params), 'county');
             $parentData =
-            array_merge(
-                $this->rollUpData(State::find($id)->name, $childData, 'state'),
-                $usaData
-            );
+                array_merge(
+                    $this->rollUpData(State::find($id)->name, $childData, 'state'),
+                    $usaData
+                );
 
             $parentLabel = 'State';
             $childLabel = 'County';
