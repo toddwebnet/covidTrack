@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ReportDay;
+use App\Services\AgeImportService;
 use App\Services\DeathOrCaseImportService;
 use App\Services\PopulationImportService;
 use Illuminate\Console\Command;
@@ -13,6 +14,14 @@ class ImportData extends Command
 
     public function handle()
     {
+        $csvPath = "https://data.cdc.gov/api/views/9bhg-hcku/rows.csv?accessType=DOWNLOAD";
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'ages.csv');
+        copy($csvPath, $tempFilePath);
+        /** @var AgeImportService $popService */
+        $popService = app()->make(AgeImportService::class);
+        $popService->import($tempFilePath, true);
+        unlink($tempFilePath);
+
         $maxReportDate = ReportDay::maxReportDate();
 
         $csvPath = "https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_county_population_usafacts.csv";

@@ -47,7 +47,6 @@ class PopulationImportService
         }
         if ($c % 80 != 0) {
             if ($output) print " {$c}\n";
-            if ($output) print " {$c}\n";
         }
     }
 
