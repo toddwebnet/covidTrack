@@ -27,21 +27,13 @@ class AppController extends Controller
     private function colors($num)
     {
         $colors = [
-
-            'pink',
-            'yellow',
-            'gray',
+            'red',
             'orange',
-            'brown',
+            'yellow',
             'green',
+            'DodgerBlue',
             'blue',
             'purple',
-            'cyan',
-            'DodgerBlue',
-            'deeppink',
-            'darkred',
-            'lightred',
-            'hotpink',
             'indianred',
             'lavender',
             'maroon'
@@ -62,14 +54,12 @@ class AppController extends Controller
         $colors = $this->colors(count($packet));
         $datasets = [
             [
-                "label"=> "Covid Deaths By Age Group",
+                "label" => "Covid Deaths By Age Group",
                 'data' => $values,
                 'backgroundColor' => $colors
             ]
         ];
         $i = 0;
-
-
 
         foreach ($packet as $label => $value) {
 
@@ -91,12 +81,11 @@ class AppController extends Controller
             //'options' => []
         ];
 
-
         return ($dataObj);
     }
 
-    function data($formulas = 'case_totals,death_totals,case_deltas,death_deltas,perc_pop_cases,perc_pop_deaths,change_rate_cases,change_rate_deaths',
-                  $source = null, $id = null)
+    public function data($formulas = 'case_totals,death_totals,case_deltas,death_deltas,perc_pop_cases,perc_pop_deaths,change_rate_cases,change_rate_deaths',
+                         $source = null, $id = null)
     {
         if ($formulas == 'age_breakdown_pie') {
             return $this->ageBreakdown($source, $id, 'pie');
@@ -325,7 +314,6 @@ class AppController extends Controller
 
     public function table($source = null, $id = null)
     {
-
         $reportdate = ReportDay::maxReportDate();
         if ($source == 'county') {
             $source = 'state';
@@ -373,7 +361,6 @@ class AppController extends Controller
             $parentLabel = 'State';
             $childLabel = 'County';
         }
-
         $data = [
             'parents' => [
                 'label' => $parentLabel,
@@ -382,9 +369,19 @@ class AppController extends Controller
             'children' => [
                 'label' => $childLabel,
                 'rows' => $childData,
-            ]
+            ],
+
         ];
         return view('tables', $data);
+    }
+
+    public function ages($source = null, $id = null){
+        $data = [
+            'ageState' => app()->make(AgeDataBuilder::class)->getStateName($source, $id),
+            'ages' => app()->make(AgeDataBuilder::class)->getTableData($source, $id)
+        ];
+        return view('ages', $data);
+
     }
 
     private function getUsaTableData($reportdate)

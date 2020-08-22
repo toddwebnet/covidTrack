@@ -43,19 +43,17 @@
                 onclick="toggleTable()"
         >Tables
         </button>
+        <button id="ageToggleButton"
+                class="btn"
+                style="margin: 6px"
+                onclick="toggleAge()"
+        >Age Breakdowns
+        </button>
 
     </div>
     <hr/>
     <div class="row" id="graphContainer">
-        <div class="col-12">
-            <h2 id="deathsTitle" style="margin-top: 20px"></h2>
-        </div>
-        <div class="col-6">
-            <canvas class="deaths" id="deaths1"></canvas>
-        </div>
-        <div class="col-6">
-            <canvas class="deaths" id="deaths2"></canvas>
-        </div>
+        <div id="loading_graph" style="display:none">Loading...</div>
 
         {{--        <div id="loading_graph1">Loading...</div>--}}
         <h2 id="graph1Title" style="margin-top: 20px"></h2>
@@ -78,17 +76,29 @@
         <div id="tableContent"></div>
     </div>
 
+    <div class="row" id="ageContainer" style="display:none">
+        <div id="loading_age" style="display:none">Loading...</div>
+        <div class="col-12">
+            <h2 id="deathsTitle" style="margin-top: 20px"></h2>
+        </div>
+        <div class="col-6">
+            <canvas class="deaths" id="deaths1"></canvas>
+        </div>
+        <div class="col-6">
+            <canvas class="deaths" id="deaths2"></canvas>
+        </div>
+
+        <div id="ageContent" class="col-12"></div>
+    </div>
+
     <div class="row" style="padding: 40px">
         <ul class=" clearfix">
-            <li>
-                Source: <a href="https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/" target="_blank">https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/</a>
-
+            <li>Source: <a href="https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/" target="_blank">https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/</a>
             </li>
             <li>
                 Raw Data:
                 <ul>
                     <li>
-
                         <a
                             href="https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_confirmed_usafacts.csv">Confirmed
                             Cases</a></li>
@@ -100,6 +110,15 @@
                         <a href="https://usafactsstatic.blob.core.windows.net/public/data/covid-19/covid_county_population_usafacts.csv">County
                             Populations</a>
                     </li>
+
+                </ul>
+
+            </li>
+            <li>Source: <a href="https://data.cdc.gov/api/views" target="_blank">https://data.cdc.gov</a>
+            </li>
+            <li>
+                <ul>
+                    <li><a href="https://data.cdc.gov/api/views/9bhg-hcku">Aging</a></li>
                 </ul>
             </li>
         </ul>

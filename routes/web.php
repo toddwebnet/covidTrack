@@ -25,3 +25,6 @@ Route::get('/table/{source}/{id}', 'AppController@table');
 
 Route::get('/label', 'AppController@label');
 Route::get('/label/{source}/{id}', 'AppController@label');
+
+Route::get('/ages', 'AppController@ages');
+Route::get('/ages/{source}/{id}', 'AppController@ages');
