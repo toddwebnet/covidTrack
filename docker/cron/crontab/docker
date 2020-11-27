@@ -1,2 +1,2 @@
-
+15 0 * * * /usr/local/bin/php /var/www/artisan import >> /dev/null
 # * * * * * /bin/echo "foobar" >> /var/log/cron.log
