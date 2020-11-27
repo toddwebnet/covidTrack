@@ -29,7 +29,7 @@ class PopulationImportService
                 continue;
             }
             $c++;
-            if (!array_key_exists($row['State'], $states)) {
+            if (!isset($states[$row['State']])) {
                 $states[$row['State']] = State::getStateId($row['State']);
             }
             if (!$this->countyPopulationExists($row['countyFIPS'], $row['population'])) {
@@ -53,7 +53,7 @@ class PopulationImportService
     private function countyPopulationExists($id, $population)
     {
 
-        if (array_key_exists($id, $this->countyPopulations)) {
+        if (isset($this->countyPopulations[$id])) {
             return $this->countyPopulations[$id == $population];
         }
         return false;
