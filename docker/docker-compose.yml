@@ -76,6 +76,7 @@ services:
         - PHP_UPSTREAM_PORT=${PHP_UPSTREAM_PORT}
     volumes:
       - ${APP_PATH}/docker/_devops/nginx/covidtrack.conf:/etc/nginx/sites-available/default.conf
+      - ./nginx/ssl/:/etc/nginx/ssl
       - ${APP_PATH}:/var/www
     ports:
       - "8101:8101"
