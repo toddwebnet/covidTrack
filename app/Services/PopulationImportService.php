@@ -52,9 +52,8 @@ class PopulationImportService
 
     private function countyPopulationExists($id, $population)
     {
-
         if (isset($this->countyPopulations[$id])) {
-            return $this->countyPopulations[$id == $population];
+            return $this->countyPopulations[$id] == $population;
         }
         return false;
     }

@@ -36,7 +36,16 @@ class AppController extends Controller
             'purple',
             'indianred',
             'lavender',
-            'maroon'
+            'maroon','red',
+            'orange',
+            'yellow',
+            'green',
+            'DodgerBlue',
+            'blue',
+            'purple',
+            'indianred',
+            'lavender',
+            'maroon',
         ];
         $rColors = [];
         for ($x = 0; $x < $num; $x++) {

@@ -41,6 +41,7 @@ class AgeDataBuilder
         ];
         $totalCovids = 0;
         $data = [];
+
         foreach ($this->getData($source, $id) as $row) {
             if (in_array($row->age_group, ['All ages'])) {
                 continue;
@@ -70,18 +71,23 @@ class AgeDataBuilder
 
         $groups = [
             "Under 1 year" => '0-14 Years',
+            "0-17 years" => '0-17 years',
             "1-4 years" => '1-14 Years',
             "5-14 years" => '1-14 Years',
             "15-24 years" => '15-24 Years',
+            "30-49 years" => '30-49 years',
+            "18-29 years" => '18-29 years',
             "25-34 years" => '25-34 years',
             "35-44 years" => "35-44 years",
             "45-54 years" => "45-54 years",
             "55-64 years" => "55-64 years",
+            "50-64 years" => "50-64 years",
             "65-74 years" => "65 and Over",
             "75-84 years" => "65 and Over",
             "85 years and over" => "65 and Over",
+            "All Ages" => "All Ages"
         ];
-
+//dd($this->getData($source, $id)->toArray());
         foreach ($this->getData($source, $id) as $item) {
             if (in_array($item->age_group, ['All ages'])) {
                 continue;
